@@ -4,15 +4,23 @@ from re import M
 from secrets import choice
 from subprocess import check_output
 from classes.game import person, bcolors
+from classes.magic import spell
+
+# Create Black magic
+fire = spell("Fire", 10, 100, "Black")
+thunder = spell("Thunder", 8, 48, "Black")
+watersplash = spell("Watersplash", 3, 24, "Black")
+meteor = spell("Meteor", 20, 140, "Black")
+
+# create White Magic
+Cure = spell("Cure", 12, 120, "White")
+Cura = spell("Cura", 7, 60, "White")
+Tulsi = spell("Tulsi", 10, 100, "White")
+Alovera = spell("Alovera", 20, 175, "White")
 
 
-magic = [{"name": "fire", "cost": 10, "dmg": 60},
-         {"name": "thunder", "cost": 8, "dmg": 48},
-         {"name": "waterSplash", "cost": 3, "dmg": 24},
-         ]
-
-
-player = person(hp=460, mp=65, atk=60, df=34, magic=magic)
+player = person(hp=460, mp=65, atk=60, df=34, magic=[
+                fire, thunder, watersplash, meteor])
 
 enemy = person(hp=500, mp=65, atk=45, df=24, magic=magic)
 
@@ -41,9 +49,15 @@ while (running):
         print("dmg")
         player.choose_magic()
         magic_choice = int(input("CHoose Magic:")) - 1
+
         magic_dmg = player.generate_spell_damage(magic_choice)
         spell = player.get_spell_name(magic_choice)
         cost = player.get_spell_mp_cost(magic_choice)
+
+        spell = player.magic[magic_choice]
+        magic_dmg = spell.generate_damage()
+
+
 # if player does not have enugh match points then tell player to only attack
         current_mp = player.get_mp()
         if cost > current_mp:
